@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_27_140533) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_27_205620) do
   create_table "businesses", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -23,12 +23,46 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_27_140533) do
     t.index ["reset_password_token"], name: "index_businesses_on_reset_password_token", unique: true
   end
 
+  create_table "categories", force: :cascade do |t|
+    t.integer "volume"
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "items", force: :cascade do |t|
+    t.integer "quantity"
+    t.string "name"
+    t.integer "warehouse_id", null: false
+    t.integer "category_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_items_on_category_id"
+    t.index ["warehouse_id"], name: "index_items_on_warehouse_id"
+  end
+
   create_table "jwt_denylist", force: :cascade do |t|
     t.string "jti", null: false
     t.datetime "exp", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["jti"], name: "index_jwt_denylist_on_jti"
+  end
+
+  create_table "shippings", force: :cascade do |t|
+    t.decimal "price"
+    t.integer "quantity"
+    t.string "source"
+    t.string "destination"
+    t.string "status"
+    t.string "location"
+    t.integer "item_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.decimal "predicted_price"
+    t.string "type"
+    t.boolean "accepted"
+    t.index ["item_id"], name: "index_shippings_on_item_id"
   end
 
   create_table "warehouses", force: :cascade do |t|
@@ -40,4 +74,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_27_140533) do
     t.integer "business_id"
   end
 
+  add_foreign_key "items", "categories"
+  add_foreign_key "items", "warehouses"
+  add_foreign_key "shippings", "items"
 end

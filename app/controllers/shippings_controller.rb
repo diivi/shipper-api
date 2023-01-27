@@ -1,22 +1,16 @@
 class ShippingsController < ApplicationController
-  before_action :set_shipping, only: %i[ show update destroy ]
+  before_action :authenticate_business!
+  before_action :set_shipping, only: %i[ show edit update destroy ]
+  before_action :get_business_from_token, only: %i[ index create ]
+  before_action :authorize_business, only: %i[ update destroy ]
 
-  # GET /shippings
   def index
-    @shippings = Shipping.all
-
+    @shippings = @business.shippings
     render json: @shippings
   end
 
-  # GET /shippings/1
-  def show
-    render json: @shipping
-  end
-
-  # POST /shippings
   def create
-    @shipping = Shipping.new(shipping_params)
-
+    @shipping = @business.shippings.build(shipping_params)
     if @shipping.save
       render json: @shipping, status: :created, location: @shipping
     else
@@ -24,7 +18,6 @@ class ShippingsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /shippings/1
   def update
     if @shipping.update(shipping_params)
       render json: @shipping
@@ -33,7 +26,6 @@ class ShippingsController < ApplicationController
     end
   end
 
-  # DELETE /shippings/1
   def destroy
     @shipping.destroy
   end
@@ -46,6 +38,19 @@ class ShippingsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def shipping_params
-      params.require(:shipping).permit(:price, :quantity, :source, :destination, :status, :location, :item_id)
+      params.require(:shipping).permit(:predicted_price, :quantity, :source, :destination, :type, :status, :location, :item_id)
+    end
+
+    def authorize_business
+      if current_business.id != @shipping.item.warehouse.business_id
+        render json: { error: 'You are not authorized to perform this action' }, status: :unauthorized
+      end
+    end
+
+    def get_business_from_token
+      token = request.headers['Authorization'].split(' ').last
+      decoded_token = JWT.decode(token, Rails.application.credentials.devise[:jwt_secret_key])
+      business_id = decoded_token[0]['sub']
+      @business = Business.find(business_id)
     end
 end

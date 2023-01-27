@@ -1,24 +1,21 @@
 class ItemsController < ApplicationController
-  before_action :set_item, only: %i[ show update destroy ]
-  before_action :authenticate_business!, only: %i[ create update destroy ]
-  before_action :get_business_from_token, only: %i[ index create ]
+  before_action :get_warehouse
+  before_action :authenticate_business!
+  before_action :get_business_from_token
+  before_action :authorize_business
 
-  # GET /items
   def index
-    @items = Item.all
-
+    @items = @warehouse.items
     render json: @items
   end
 
-  # GET /items/1
   def show
+    @item = @warehouse.items.find(params[:id])
     render json: @item
   end
 
-  # POST /items
   def create
-    @item = Item.new(item_params)
-
+    @item = @warehouse.items.build(item_params)
     if @item.save
       render json: @item, status: :created, location: @item
     else
@@ -26,8 +23,8 @@ class ItemsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /items/1
   def update
+    @item = @warehouse.items.find(params[:id])
     if @item.update(item_params)
       render json: @item
     else
@@ -35,26 +32,32 @@ class ItemsController < ApplicationController
     end
   end
 
-  # DELETE /items/1
   def destroy
+    @item = @warehouse.items.find(params[:id])
     @item.destroy
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_item
-      @item = Item.find(params[:id])
-    end
+  private 
 
-    # Only allow a list of trusted parameters through.
-    def item_params
-      params.require(:item).permit(:quantity, :name, :warehouse_id, :category_id)
-    end
+  def item_params
+    params.require(:item).permit(:name, :quantity, :category_id)
+  end
 
-    def get_business_from_token
-      token = request.headers['Authorization'].split(' ').last
-      decoded_token = JWT.decode(token, Rails.application.credentials.devise[:jwt_secret_key])
-      business_id = decoded_token[0]['sub']
-      @business = Business.find(business_id)
+  def get_warehouse
+    @warehouse = Warehouse.find(params[:warehouse_id])
+  end
+
+  def get_business_from_token
+    token = request.headers['Authorization'].split(' ').last
+    decoded_token = JWT.decode(token, Rails.application.credentials.devise[:jwt_secret_key])
+    business_id = decoded_token[0]['sub']
+    @business = Business.find(business_id)
+  end
+
+  def authorize_business
+    if @business != @warehouse.business
+      render json: { error: "You are not authorized to perform this action" }, status: :unauthorized
     end
+  end
+
 end

@@ -1,8 +1,9 @@
 Rails.application.routes.draw do
   resources :shippings
-  resources :items
   resources :categories
-  resources :warehouses
+  resources :warehouses do
+    resources :items
+  end
   devise_for :businesses,
   controllers: {
     sessions: 'businesses/sessions',
