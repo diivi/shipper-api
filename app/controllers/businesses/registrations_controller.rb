@@ -11,7 +11,7 @@ class Businesses::RegistrationsController < Devise::RegistrationsController
         render json: {
             message: 'Signed up succesfully',
             business: current_business
-        }, status: :unprocessable_entity
+        }, status: :ok
     end
 
     def register_failed
