@@ -3,6 +3,7 @@ class ItemsController < ApplicationController
   before_action :authenticate_business!
   before_action :get_business_from_token
   before_action :authorize_business
+  before_action :check_limit_exceeded, only: %i[ create ]
 
   def index
     @items = @warehouse.items
@@ -57,6 +58,12 @@ class ItemsController < ApplicationController
   def authorize_business
     if @business != @warehouse.business
       render json: { error: "You are not authorized to perform this action" }, status: :unauthorized
+    end
+  end
+
+  def check_limit_exceeded
+    if @warehouse.items.length + item_params[:quantity].to_i > @warehouse.max_items
+      render json: { error: "Warehouse capacity exceeded" }, status: :unprocessable_entity
     end
   end
 end
