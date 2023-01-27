@@ -10,7 +10,4 @@ class AdminController < ApplicationController
     @shippings = Shipping.where(status: 'accepted')
     render json: @shippings
   end
-
-  def 
-
 end
