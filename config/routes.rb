@@ -13,6 +13,9 @@ Rails.application.routes.draw do
   end
   get 'admin/shipping_requests', to: 'admin#shipping_requests'
   get 'admin/shippings', to: 'admin#shippings'
+  patch 'admin/update_shipping_price/:id', to: 'admin#update_shipping_price'
+  patch 'admin/update_shipping_status/:id', to: 'admin#update_shipping_status'
+  patch 'admin/update_shipping_location/:id', to: 'admin#update_shipping_location'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
