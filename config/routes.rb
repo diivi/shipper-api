@@ -11,6 +11,8 @@ Rails.application.routes.draw do
   resources :warehouses do
     resources :items
   end
+  get 'admin/shipping_requests', to: 'admin#shipping_requests'
+  get 'admin/shippings', to: 'admin#shippings'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")

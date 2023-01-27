@@ -1,6 +1,5 @@
 class ShippingsController < ApplicationController
-  #authenticate business or admin
-  before_action :authenticate_business_or_admin!, only: %i[ index create update destroy ]
+  before_action :authenticate_business!
   before_action :set_shipping, only: %i[ show edit update destroy ]
   before_action :get_business_from_token, only: %i[ index create ]
   before_action :authorize_business, only: %i[ update destroy ]
@@ -53,15 +52,5 @@ class ShippingsController < ApplicationController
       decoded_token = JWT.decode(token, Rails.application.credentials.devise[:jwt_secret_key])
       business_id = decoded_token[0]['sub']
       @business = Business.find(business_id)
-    end
-
-    def authenticate_business_or_admin!
-      if authenticate_business!
-        return true
-      elsif authenticate_admin!
-        return true
-      else
-        render json: { error: 'You are not authorized to perform this action' }, status: :unauthorized
-      end
     end
 end
