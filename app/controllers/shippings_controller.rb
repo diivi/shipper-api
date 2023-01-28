@@ -1,5 +1,5 @@
 class ShippingsController < ApplicationController
-  before_action :authenticate_business!
+  before_action :authenticate_business!, except: %i[ show ]
   before_action :set_shipping, only: %i[ show update destroy ]
   before_action :get_business_from_token, only: %i[ index create ]
   before_action :authorize_business, only: %i[ update destroy ]
