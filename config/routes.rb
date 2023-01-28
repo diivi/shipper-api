@@ -18,9 +18,9 @@ Rails.application.routes.draw do
   end
   get 'admin/shipping_requests', to: 'admin#shipping_requests'
   get 'admin/shippings', to: 'admin#shippings'
-  patch 'admin/update_shipping_price/:id', to: 'admin#update_shipping_price'
-  patch 'admin/update_shipping_status/:id', to: 'admin#update_shipping_status'
-  patch 'admin/update_shipping_location/:id', to: 'admin#update_shipping_location'
+  post 'admin/update_shipping_price/:id', to: 'admin#update_shipping_price'
+  post 'admin/update_shipping_status/:id', to: 'admin#update_shipping_status'
+  post 'admin/update_shipping_location/:id', to: 'admin#update_shipping_location'
   get 'business/items', to: 'business#items'
   get 'distance', to: 'distance#distance_to_india'
   # public api for businesses /public/
