@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   patch 'admin/update_shipping_status/:id', to: 'admin#update_shipping_status'
   patch 'admin/update_shipping_location/:id', to: 'admin#update_shipping_location'
   get 'business/items', to: 'business#items'
+  get 'distance', to: 'distance#distance_to_india'
   # public api for businesses /public/
   scope '/public' do
     get 'warehouses', to: 'public#warehouses'
