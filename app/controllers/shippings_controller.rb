@@ -42,7 +42,7 @@ class ShippingsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def shipping_params
-      params.require(:shipping).permit(:predicted_price, :source, :destination, :shipping_type, :status, :location, :item_id)
+      params.require(:shipping).permit(:predicted_price, :source, :destination, :shipping_type, :status, :location, :item_id, :quantity)
     end
 
     def authorize_business

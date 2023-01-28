@@ -15,10 +15,10 @@ class AdminController < ApplicationController
     @shipping = Shipping.find(params[:id])      
     @shipping.update(shipping_update_params)
     if params[:status] == "accepted"
-      @shipping.item.warehouse.update(quantity: @shipping.item.warehouse.quantity - @shipping.quantity)
+      @shipping.item.warehouse_id = null
     end
     if params[:status] == "delivered" and @shipping.type == "to_warehouse"
-      @shipping.to_warehouse.update(quantity: @shipping.quantity + @shipping.to_warehouse.quantity)
+      @shipping.item.warehouse_id =  @shipping.to_warehouse_id
     end
     render json: @shipping
   end
