@@ -7,4 +7,5 @@ class Business < ApplicationRecord
   has_many :warehouses
   has_many :items, through: :warehouses
   has_many :shippings
+  has_many :public_api_keys, dependent: :destroy
 end

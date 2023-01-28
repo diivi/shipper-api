@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_28_032251) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_28_061544) do
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -76,6 +76,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_28_032251) do
     t.index ["jti"], name: "index_jwt_denylist_on_jti"
   end
 
+  create_table "public_api_keys", force: :cascade do |t|
+    t.string "key"
+    t.integer "business_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["business_id"], name: "index_public_api_keys_on_business_id"
+  end
+
   create_table "shippings", force: :cascade do |t|
     t.decimal "price"
     t.integer "quantity"
@@ -107,6 +115,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_28_032251) do
 
   add_foreign_key "items", "categories"
   add_foreign_key "items", "warehouses"
+  add_foreign_key "public_api_keys", "businesses"
   add_foreign_key "shippings", "businesses"
   add_foreign_key "shippings", "items"
   add_foreign_key "shippings", "warehouses", column: "to_warehouse_id"

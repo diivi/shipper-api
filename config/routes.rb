@@ -25,6 +25,8 @@ Rails.application.routes.draw do
   get 'distance', to: 'distance#distance_to_india'
   # public api for businesses /public/
   scope '/public' do
+    get 'items', to: 'public#items'
+    get 'warehouses/:id', to: 'public#warehouse'
     get 'warehouses', to: 'public#warehouses'
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
