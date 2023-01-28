@@ -7,7 +7,8 @@ class AdminController < ApplicationController
   end
 
   def shippings
-    @shippings = Shipping.where(status: 'accepted')
+    @shippings = Shipping.where(status: ['accepted', 'shipped'])
+      
     render json: @shippings, :include => {:business => {:only => :email}}
   end
 
