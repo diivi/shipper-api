@@ -5,7 +5,12 @@ Rails.application.routes.draw do
     registrations: 'businesses/registrations'
   },
   defaults: { format: :json }
-  devise_for :admins
+  devise_for :admins,
+  controllers: {
+    sessions: 'admins/sessions',
+    registrations: 'admins/registrations'
+  },
+  defaults: { format: :json }
   resources :shippings
   resources :categories
   resources :warehouses do
