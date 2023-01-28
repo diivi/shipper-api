@@ -2,24 +2,18 @@ class AdminController < ApplicationController
   before_action :authenticate_admin!
 
   def shipping_requests
-    @shippings = Shipping.where(status: 'pending').include(:business)
-    render json: @shippings
+    @shippings = Shipping.where(status: 'pending')
+    render json: @shippings, :include => {:business => {:only => :email}}
   end
 
   def shippings
     @shippings = Shipping.where(status: 'accepted')
-    render json: @shippings
-  end
-
-  def update_shipping_price
-    @shipping = Shipping.find(params[:id])
-    @shipping.update(price: params[:predicted_price])
-    render json: @shipping
+    render json: @shippings, :include => {:business => {:only => :email}}
   end
 
   def update_shipping_status
     @shipping = Shipping.find(params[:id])      
-    @shipping.update(status: params[:status])
+    @shipping.update(shipping_update_params)
     if params[:status] == "accepted"
       @shipping.item.warehouse.update(quantity: @shipping.item.warehouse.quantity - @shipping.quantity)
     end
@@ -33,5 +27,9 @@ class AdminController < ApplicationController
     @shipping = Shipping.find(params[:id])
     @shipping.update(location: params[:location])
     render json: @shipping
+  end
+
+  def shipping_update_params
+    params.permit(:status, :price)
   end
 end
