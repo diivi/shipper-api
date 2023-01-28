@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_28_000118) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_28_004757) do
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -80,7 +80,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_28_000118) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.decimal "predicted_price"
-    t.string "type"
+    t.string "shipping_type"
     t.boolean "accepted"
     t.integer "to_warehouse_id"
     t.index ["item_id"], name: "index_shippings_on_item_id"

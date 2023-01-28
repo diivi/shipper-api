@@ -15,6 +15,7 @@ class ShippingsController < ApplicationController
 
   def create
     @shipping = @business.shippings.build(shipping_params)
+    @shipping.quantity = @shipping.item.quantity
     if @shipping.save
       render json: @shipping, status: :created, location: @shipping
     else
@@ -42,7 +43,7 @@ class ShippingsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def shipping_params
-      params.require(:shipping).permit(:predicted_price, :quantity, :source, :destination, :type, :status, :location, :item_id)
+      params.require(:shipping).permit(:predicted_price, :source, :destination, :shipping_type, :status, :location, :item_id)
     end
 
     def authorize_business
