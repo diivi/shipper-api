@@ -5,5 +5,6 @@ class Business < ApplicationRecord
          :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
 
   has_many :warehouses
-
+  has_many :items, through: :warehouses
+  has_many :shippings
 end

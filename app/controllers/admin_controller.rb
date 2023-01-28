@@ -2,7 +2,7 @@ class AdminController < ApplicationController
   before_action :authenticate_admin!
 
   def shipping_requests
-    @shippings = Shipping.where(status: 'pending')
+    @shippings = Shipping.where(status: 'pending').include(:business)
     render json: @shippings
   end
 

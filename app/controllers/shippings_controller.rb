@@ -15,7 +15,6 @@ class ShippingsController < ApplicationController
 
   def create
     @shipping = @business.shippings.build(shipping_params)
-    @shipping.quantity = @shipping.item.quantity
     if @shipping.save
       render json: @shipping, status: :created, location: @shipping
     else
