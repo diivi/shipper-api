@@ -18,8 +18,14 @@ class AdminController < ApplicationController
   end
 
   def update_shipping_status
-    @shipping = Shipping.find(params[:id])
+    @shipping = Shipping.find(params[:id])      
     @shipping.update(status: params[:status])
+    if params[:status] == "accepted":
+      @shipping.item.warehouse.update(quantity: @shipping.item.warehouse.quantity - @shipping.quantity)
+    end
+    if params[:status] == "delivered" and @shipping.type == "to_warehouse":
+      @shipping.to_warehouse.update(quantity: @shipping.quantity + @shipping.to_warehouse.quantity)
+    end
     render json: @shipping
   end
 
@@ -28,6 +34,4 @@ class AdminController < ApplicationController
     @shipping.update(location: params[:location])
     render json: @shipping
   end
-
-
 end

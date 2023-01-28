@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_27_220804) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_28_000118) do
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -82,7 +82,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_27_220804) do
     t.decimal "predicted_price"
     t.string "type"
     t.boolean "accepted"
+    t.integer "to_warehouse_id_id"
     t.index ["item_id"], name: "index_shippings_on_item_id"
+    t.index ["to_warehouse_id_id"], name: "index_shippings_on_to_warehouse_id_id"
   end
 
   create_table "warehouses", force: :cascade do |t|
@@ -97,4 +99,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_27_220804) do
   add_foreign_key "items", "categories"
   add_foreign_key "items", "warehouses"
   add_foreign_key "shippings", "items"
+  add_foreign_key "shippings", "warehouses", column: "to_warehouse_id_id"
 end
